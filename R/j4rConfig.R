@@ -190,7 +190,7 @@ getMemorySettings <- function() {
 .welcomeMessage <- function() {
   packageStartupMessage("Welcome to J4R!")
   packageStartupMessage("Please, make sure that Java (version 8 or later) is installed on your computer.")
-  packageStartupMessage("For more information, visit https://sourceforge.net/p/repiceasource/wiki/J4R/ .")
+  packageStartupMessage("For more information, visit https://github.com/CWFC-CCFB/J4R/wiki .")
 }
 
 
