@@ -16,7 +16,7 @@ if (!isConnectedToJava()) {
   connectToJava()
 }
 
-expectedJar <- "j4r-1.1.1.jar"
+expectedJar <- paste("j4r_server-", J4R_Server_Version, ".jar", sep="")
 
 
 test_that("Check the return value of checkIfClasspathContains", {

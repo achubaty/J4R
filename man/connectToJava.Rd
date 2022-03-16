@@ -11,7 +11,8 @@ connectToJava(
   memorySize = NULL,
   public = FALSE,
   internalPort = c(0, 0),
-  key = NULL
+  key = NULL,
+  headless = T
 )
 }
 \arguments{
@@ -25,9 +26,11 @@ connectToJava(
 
 \item{public}{true to tonnect to a server that is already running locally (FALSE by default)}
 
-\item{internalPort}{a vector of two integers representing the backdoor port and the garboage collector port}
+\item{internalPort}{a vector of two integers representing the backdoor port and the garbage collector port}
 
-\item{key}{an integar used as a token to ensure a secure connection}
+\item{key}{an integer used as a token to ensure a secure connection}
+
+\item{headless}{a boolean to enable the headless mode (is true by default).}
 }
 \value{
 a logical TRUE if the function managed to get connected to the server or if it was already connected or
@@ -42,6 +45,10 @@ allowed. When set to 0, these ports are randomly selected. By default, the serve
 ports.
 
 The extensionPath can either be set in this function or dynamically changed (see the addToClassPath function).
+However, dynamic classpath changes are not allowed in Java version later than 16.
+
+The headless mode assumes the JVM has no keyboard, display or mouse. In order to enable
+the UI on the Java end, the headless argument should be set to false.
 }
 \seealso{
 \code{\link{addToClassPath}}

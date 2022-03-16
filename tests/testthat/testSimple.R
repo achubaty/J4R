@@ -147,7 +147,7 @@ test_that("Create a NullWrapper instance", {
 
 #### Check if libraries are part of the path ####
 
-expectedJar <- "j4r-1.1.1.jar"
+expectedJar <- paste("j4r_server-", J4R_Server_Version, ".jar", sep="")
 
 test_that("Check the return value of checkIfClasspathContains", {
   expect_equal(checkIfClasspathContains(expectedJar), TRUE)

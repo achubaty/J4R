@@ -4,9 +4,11 @@
 # Date: January 2019
 ########################################################
 
-
-
-J4RVersion <- "1.1.1"
+#'
+#' The current version of the J4R Java server
+#'
+#' @export
+J4R_Server_Version <- "1.1.2"
 
 #'
 #' Connect to Java environment
@@ -18,14 +20,19 @@ J4RVersion <- "1.1.1"
 #' ports.
 #'
 #' The extensionPath can either be set in this function or dynamically changed (see the addToClassPath function).
+#' However, dynamic classpath changes are not allowed in Java version later than 16.
+#'
+#' The headless mode assumes the JVM has no keyboard, display or mouse. In order to enable
+#' the UI on the Java end, the headless argument should be set to false.
 #'
 #' @param host the URL or IP address of the host ("localhost" by default )
 #' @param port a vector of the listening ports for the Java server
 #' @param extensionPath the path to jar files that can be loaded by the system classloader
 #' @param memorySize the memory size of the Java Virtual Machine in Mb (if not specified, the JVM runs with the default memory size)
 #' @param public true to tonnect to a server that is already running locally (FALSE by default)
-#' @param internalPort a vector of two integers representing the backdoor port and the garboage collector port
-#' @param key an integar used as a token to ensure a secure connection
+#' @param internalPort a vector of two integers representing the backdoor port and the garbage collector port
+#' @param key an integer used as a token to ensure a secure connection
+#' @param headless a boolean to enable the headless mode (is true by default).
 #'
 #' @seealso \code{\link{addToClassPath}}
 #'
@@ -39,7 +46,8 @@ connectToJava <- function(host = "localhost",
                           memorySize = NULL,
                           public = FALSE,
                           internalPort = c(0,0),
-                          key = NULL) {
+                          key = NULL,
+                          headless = T) {
   if (isConnectedToJava()) {
     message("It seems R is already connected to the local Java server.")
     return(TRUE)
@@ -55,6 +63,7 @@ connectToJava <- function(host = "localhost",
       }
       message("Starting local Java server...")
       parms <- c("-firstcall", "true")
+
       if (!is.null(port)) {
         if (any(port < 0)) {
           stop("Ports should be integers equal to or greater than 0!")
@@ -64,6 +73,7 @@ connectToJava <- function(host = "localhost",
         }
         parms <- c(parms, "-ports", paste(port,collapse=portSplitter))
       }
+
       if (!is.null(internalPort)) {
         if (any(internalPort < 0)) {
           stop("Internal ports should be integers equal to or greater than 0!")
@@ -73,9 +83,11 @@ connectToJava <- function(host = "localhost",
         }
         parms <- c(parms, "-backdoorport", paste(internalPort,collapse=portSplitter))
       }
+
       if (!is.null(extensionPath)) {
         parms <- c(parms, "-ext", extensionPath)
       }
+
       if (!is.null(memorySize)) {
         if (!is.numeric(memorySize) && !is.integer(memorySize)) {
           stop("The memorySize parameter should be either a numeric or an integer!")
@@ -88,24 +100,25 @@ connectToJava <- function(host = "localhost",
         memorySize <- get("defaultJVMMemory", envir = settingEnv, inherits = F)
         parms <- c(parms, "-mem", as.integer(memorySize))
       }
+
+      if (headless)
+        parms <- c(parms, "-headless", "true")
+      else
+        parms <- c(parms, "-headless", "false")
+
       parms <- c(parms, "-wd", paste("\"",getwd(),"\"", sep=""))
       filename <- file.path(getwd(), "J4RTmpFile")
       if (file.exists(filename)) {
         file.remove(filename)
       }
-#      if (file.exists(system.file("inst", "java", "j4r.jar", package = "J4R"))) {  ### test mode
-#        rootPath <- system.file("inst", "java", package = "J4R")
-#      } else {  ### normal mode
-        rootPath <- system.file("java", package = "J4R")
-#      }
-      #    message(rootPath)
+
+      rootPath <- system.file("java", package = "J4R")
+#    message(rootPath)
       architecture <- suppressMessages(getJavaVersion()$architecture)
       if (architecture == "32-Bit") {
-#        jarFilename <- "j4r_x86.jar"
-#        message("Running the 32-Bit version")
         stop("Java 32-Bit version are no longer supported!")
       } else {
-        jarFilename <- paste("j4r-", J4RVersion, ".jar", sep="")
+        jarFilename <- paste("j4r_server-", J4R_Server_Version, ".jar", sep="")
       }
       path <- file.path(rootPath, jarFilename)
       system2(.getJavaPath(), args = c("-Xmx50m", "-jar", path, parms), wait = F)
