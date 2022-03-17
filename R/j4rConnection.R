@@ -121,7 +121,7 @@ connectToJava <- function(host = "localhost",
         jarFilename <- paste("j4r_server-", J4R_Server_Version, ".jar", sep="")
       }
       path <- file.path(rootPath, jarFilename)
-      system2(.getJavaPath(), args = c("-Xmx50m", "-jar", path, parms), wait = F)
+      system2(.getJavaPath(), args = c("-Xmx50m", "-Djava.awt.headless=true", "-jar", path, parms), wait = F)  ### first JVM should always use the -Djava.awt.headless=true option. Otherwise headless JVM will fail to load the first JVM.
       initialTime <- Sys.time()
       while (!file.exists(filename)) {
         Sys.sleep(0.5)
