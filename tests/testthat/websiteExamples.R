@@ -2,6 +2,7 @@
 # Examples of code shown on the website of J4R
 #######################################################
 
+library(J4R)
 connectToJava()
 
 shutdownJava()
@@ -63,3 +64,15 @@ m <- matrix(data = 1:6, nrow=2, ncol=3)
 m
 mySecondArray <- as.JavaArray(m)
 getAllValuesFromArray(mySecondArray)
+
+shutdownClient()
+
+connectToJava(headless = F)
+nullComponent <- createJavaObject("java.awt.Component", isNullObject = T)
+callJavaMethod("javax.swing.JOptionPane", "showConfirmDialog",
+                  nullComponent,
+                  "Did you see the jabberwock?",
+                  "Question?",
+                  getJavaField("javax.swing.JOptionPane", "YES_NO_OPTION"),
+                  getJavaField("javax.swing.JOptionPane", "QUESTION_MESSAGE"))
+shutdownClient()
