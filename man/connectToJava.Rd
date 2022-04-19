@@ -20,7 +20,8 @@ connectToJava(
 
 \item{port}{a vector of the listening ports for the Java server}
 
-\item{extensionPath}{the path to jar files that can be loaded by the system classloader}
+\item{extensionPath}{a vector of characters that contains the paths to jar files
+or to the classes that are to be loaded by the system classloader.}
 
 \item{memorySize}{the memory size of the Java Virtual Machine in Mb (if not specified, the JVM runs with the default memory size)}
 
