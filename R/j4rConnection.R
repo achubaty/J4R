@@ -8,7 +8,7 @@
 #' The current version of the J4R Java server
 #'
 #' @export
-J4R_Server_Version <- "1.1.2"
+J4R_Server_Version <- "1.1.3"
 
 #'
 #' Connect to Java environment
@@ -27,7 +27,8 @@ J4R_Server_Version <- "1.1.2"
 #'
 #' @param host the URL or IP address of the host ("localhost" by default )
 #' @param port a vector of the listening ports for the Java server
-#' @param extensionPath the path to jar files that can be loaded by the system classloader
+#' @param extensionPath a vector of characters that contains the paths to jar files
+#'  or to the classes that are to be loaded by the system classloader.
 #' @param memorySize the memory size of the Java Virtual Machine in Mb (if not specified, the JVM runs with the default memory size)
 #' @param public true to tonnect to a server that is already running locally (FALSE by default)
 #' @param internalPort a vector of two integers representing the backdoor port and the garbage collector port
@@ -85,7 +86,7 @@ connectToJava <- function(host = "localhost",
       }
 
       if (!is.null(extensionPath)) {
-        parms <- c(parms, "-ext", extensionPath)
+        parms <- c(parms, "-ext", paste(extensionPath, collapse = "::"))
       }
 
       if (!is.null(memorySize)) {
@@ -124,10 +125,18 @@ connectToJava <- function(host = "localhost",
       system2(.getJavaPath(), args = c("-Xmx50m", "-Djava.awt.headless=true", "-jar", path, parms), wait = F)  ### first JVM should always use the -Djava.awt.headless=true option. Otherwise headless JVM will fail to load the first JVM.
       initialTime <- Sys.time()
       while (!file.exists(filename)) {
-        Sys.sleep(0.5)
+        Sys.sleep(0.1)
         elapsedTime <- Sys.time() - initialTime
         if (elapsedTime > 8) {
           stop("It seems the local Java server has failed to start!")
+        }
+      }
+      initialTime <- Sys.time()
+      while (file.exists(paste(filename, ".lock", sep=""))) {
+        Sys.sleep(0.1)
+        elapsedTime <- Sys.time() - initialTime
+        if (elapsedTime > 2) {
+          stop("It seems the lock on the info file has not been lifted!")
         }
       }
       .instantiateConnectionHandlerFromFile()

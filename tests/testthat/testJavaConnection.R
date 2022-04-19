@@ -12,11 +12,22 @@ if (isConnectedToJava()) {
   shutdownClient()
 }
 
-connectToJava(extensionPath = file.path(getwd(),"javatests"))
+extensions <- c(paste(file.path(getwd(), "javatests"), "/repicea.jar", sep=""),
+                file.path(getwd(), "javatests"))
+#extensions <- c(paste(file.path(getwd(),"tests", "testthat" , "javatests"), "/repicea.jar", sep=""),
+#                file.path(getwd(),"tests", "testthat" , "javatests"))
+
+connectToJava(extensionPath = extensions)
 # connectToJava(port=c(18011,18012), debug = T)
 
-result <- callJavaMethod("J4RTestClass", "testFunction")
+myMatrix <- createJavaObject("repicea.math.Matrix", as.integer(2), as.integer(2))
+test_that("myMatrix has been properly created", {
+  expect_equal(myMatrix$m_iCols, 2)
+  expect_equal(myMatrix$m_iRows, 2)
+})
 
+
+result <- callJavaMethod("J4RTestClass", "testFunction")
 test_that("Classpath to J4RTestClass makes it possible to call the testFunction in that class", {
   expect_equal(result, "Hello World!")
 })
