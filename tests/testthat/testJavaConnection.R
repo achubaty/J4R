@@ -13,9 +13,9 @@ if (isConnectedToJava()) {
 }
 
 extensions <- c(paste(file.path(getwd(), "javatests"), "/repicea.jar", sep=""),
-                file.path(getwd(), "javatests"))
+                "./javatests")
 #extensions <- c(paste(file.path(getwd(),"tests", "testthat" , "javatests"), "/repicea.jar", sep=""),
-#                file.path(getwd(),"tests", "testthat" , "javatests"))
+#                "./tests/testthat/javatests")
 
 connectToJava(extensionPath = extensions)
 # connectToJava(port=c(18011,18012), debug = T)

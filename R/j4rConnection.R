@@ -86,7 +86,7 @@ connectToJava <- function(host = "localhost",
       }
 
       if (!is.null(extensionPath)) {
-        parms <- c(parms, "-ext", paste(extensionPath, collapse = "::"))
+        parms <- c(parms, "-ext", paste(normalizePath(extensionPath), collapse = "::"))
       }
 
       if (!is.null(memorySize)) {
