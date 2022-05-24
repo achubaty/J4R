@@ -54,19 +54,19 @@ test_that("myArrayLists object has three java.object instances", {
   expect_equal(methods::is(myArrayLists[[3]], "java.object"), TRUE)
 })
 
-# myListOfJavaReferences <- getListOfJavaReferences()
-# test_that("There are two java references in the environment", {
-#   expect_equal(length(myListOfJavaReferences), 2)
-# })
 
 #### Calling a method on a Java object ####
 
 # In this example, the value of 15 is added to the ArrayList instance that was previously created. The method add returns a boolean. Then we call the method .get(0) on the same object. The value of 15 is then returned to R.
 
 callJavaMethod(mySimpleJavaObject, "add", 15)
-
 test_that("Adding 15 to mySimpleJavaObject instance", {
   expect_equal(callJavaMethod(mySimpleJavaObject, "get", as.integer(0)), 15)
+})
+
+myNewArrayList <- createJavaObject("java.util.ArrayList", mySimpleJavaObject)
+test_that("Adding 15 to mySimpleJavaObject instance", {
+  expect_equal(myNewArrayList$get(as.integer(0)), 15)
 })
 
 #### Calling a method several times on a Java object ####
