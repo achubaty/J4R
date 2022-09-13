@@ -130,7 +130,7 @@ test_that("Adding 1 to 601 to the 601 ArrayList instances", {
   expect_equal(largeNumberOfArrayLists[[2]]$get(0:1), c(10, 2))
 })
 
-path <- file.path(".","javatests","repicea.jar")
+path <- file.path(".","java tests","repicea.jar")
 #path <- file.path(".","tests","testthat", "javatests","repicea.jar")  ### for debugging
 addToClassPath(path)
 

@@ -25,8 +25,8 @@ test_that("Check the return value of checkIfClasspathContains", {
 })
 
 # urlString <- file.path(getwd(),"tests", "testthat", "javatests", "repicea.jar")
-urlString <- file.path(getwd(),"javatests", "repicea.jar")
-suppressWarnings(addUrlToClassPath(urlString))
+urlREpicea <- file.path(getwd(),"java tests", "repicea.jar")
+suppressWarnings(addUrlToClassPath(urlREpicea))
 
 test_that("Check the return value of checkIfClasspathContains", {
   expect_equal(checkIfClasspathContains(expectedJar), TRUE)
@@ -38,6 +38,14 @@ myMatrix <- createJavaObject("repicea.math.Matrix", as.integer(3), as.integer(3)
 test_that("Check if the Matrix object has been created", {
   expect_equal(is.null(myMatrix), FALSE)
   expect_equal("java.object" %in% class(myMatrix), TRUE)
+})
+
+shutdownClient()
+
+connectToJava(extensionPath = c(urlREpicea))
+test_that("Check the return value of checkIfClasspathContains", {
+  expect_equal(checkIfClasspathContains(expectedJar), TRUE)
+  expect_equal(checkIfClasspathContains("repicea.jar"), TRUE)
 })
 
 shutdownClient()
