@@ -8,7 +8,7 @@
 #' The current version of the J4R Java server
 #'
 #' @export
-J4R_Server_Version <- "1.1.6"
+J4R_Server_Version <- "1.1.7"
 
 #'
 #' Connect to Java environment
@@ -86,7 +86,8 @@ connectToJava <- function(host = "localhost",
       }
 
       if (!is.null(extensionPath)) {
-        parms <- c(parms, "-ext", paste(normalizePath(extensionPath), collapse = "::"))
+        quotedExtensionPath <- paste("\"", extensionPath, "\"", sep="")
+        parms <- c(parms, "-ext", paste(quotedExtensionPath, collapse = "::"))
       }
 
       if (!is.null(memorySize)) {
