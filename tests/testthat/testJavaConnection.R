@@ -12,8 +12,8 @@ if (isConnectedToJava()) {
   shutdownClient()
 }
 
-extensions <- c(paste(file.path(getwd(), "java tests"), "/repicea.jar", sep=""),
-                file.path(getwd(),"java tests"))
+extensions <- c(paste(file.path(getwd(), "javatests"), "/repicea.jar", sep=""),
+                file.path(getwd(),"javatests"))
 #extensions <- c(paste(file.path(getwd(),"tests", "testthat" , "javatests"), "/repicea.jar", sep=""),
 #                "./tests/testthat/javatests")
 

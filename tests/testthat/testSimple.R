@@ -229,7 +229,7 @@ test_that("Adding 1 to 601 to the 601 ArrayList instances", {
 
 #### Testing if a null array is still considered when invoking a method or a constructor
 
-path <- file.path(".","java tests","repicea.jar")
+path <- file.path(".","javatests","repicea.jar")
 #path <- file.path(".","tests","testthat", "javatests","repicea.jar")
 addToClassPath(path)
 myNullDoubleArray <- createJavaObject("double", 3, 3, isArray=T, isNullObject = T)
