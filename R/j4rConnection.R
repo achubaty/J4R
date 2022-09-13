@@ -121,8 +121,15 @@ connectToJava <- function(host = "localhost",
       } else {
         jarFilename <- paste("j4r_server-", J4R_Server_Version, ".jar", sep="")
       }
-      path <- file.path(rootPath, jarFilename)
-      system2(.getJavaPath(), args = c("-Xmx50m", "-Djava.awt.headless=true", "-jar", path, parms), wait = F)  ### first JVM should always use the -Djava.awt.headless=true option. Otherwise headless JVM will fail to load the first JVM.
+      path <- normalizePath(file.path(rootPath, jarFilename))
+      if (!file.exists(path)) {
+        stop("The path to the j4rserver library is incorrect!")
+      }
+      quotedPath <- paste("\"", path, "\"", sep="")
+      returnCode <- system2(.getJavaPath(), args = c("-Xmx50m", "-Djava.awt.headless=true", "-jar", quotedPath, parms), wait = F)  ### first JVM should always use the -Djava.awt.headless=true option. Otherwise headless JVM will fail to load the first JVM.
+      if (returnCode != 0) {
+        stop("The call to the system2 function has returned an exception!")
+      }
       initialTime <- Sys.time()
       while (!file.exists(filename)) {
         Sys.sleep(0.1)
